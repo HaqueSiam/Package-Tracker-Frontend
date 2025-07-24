@@ -1,0 +1,6 @@
+/* client/src/index.css */
+@import "tailwindcss";
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
