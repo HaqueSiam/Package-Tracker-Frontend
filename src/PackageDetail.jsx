@@ -1,4 +1,4 @@
-// client/src/PackageDetail.jsx
+// === File: client/src/PackageDetail.jsx ===
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 

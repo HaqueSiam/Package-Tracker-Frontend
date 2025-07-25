@@ -1,45 +1,43 @@
+// === File: client/src/CourierForm.jsx ===
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function CourierForm() {
+const statuses = [
+  'CREATED', 'PICKED_UP', 'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'DELIVERED', 'EXCEPTION', 'CANCELLED'
+];
+
+function CourierForm({ setAlert, fetchPackages }) {
   const [form, setForm] = useState({
-    package_id: '',
-    status: '',
-    lat: '',
-    lon: '',
-    timestamp: '',
-    note: '',
+    package_id: '', status: '', lat: '', lon: '', note: '', eta: '', secret: ''
   });
 
-  const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/packages/update', form, {
-        headers: { 'x-api-key': 'secret123' } // replace with your real API key
-      });
-      alert('✅ Update sent!');
+      await axios.post('http://localhost:5000/api/packages/update', form);
+      setAlert('Package updated successfully.');
+      setForm({ package_id: '', status: '', lat: '', lon: '', note: '', eta: '', secret: '' });
+      fetchPackages();
     } catch (err) {
-      alert('❌ Error submitting update');
+      setAlert(err.response?.data?.error || 'Submission failed');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow p-6 rounded-lg mb-8 max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Courier Update Form</h2>
-      {['package_id', 'status', 'lat', 'lon', 'timestamp', 'note'].map(key => (
-        <input key={key}
-          name={key}
-          placeholder={key}
-          value={form[key]}
-          onChange={handleChange}
-          className="w-full border mb-3 px-3 py-2 rounded"
-        />
-      ))}
-      <button className="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+    <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow-md mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <input type="text" placeholder="Package ID" value={form.package_id} onChange={e => setForm({ ...form, package_id: e.target.value })} required className="border px-3 py-2 rounded" />
+        <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })} required className="border px-3 py-2 rounded">
+          <option value="">Select Status</option>
+          {statuses.map(s => <option key={s}>{s}</option>)}
+        </select>
+        <input type="number" step="any" placeholder="Latitude" value={form.lat} onChange={e => setForm({ ...form, lat: e.target.value })} required className="border px-3 py-2 rounded" />
+        <input type="number" step="any" placeholder="Longitude" value={form.lon} onChange={e => setForm({ ...form, lon: e.target.value })} required className="border px-3 py-2 rounded" />
+        <input type="text" placeholder="Note" value={form.note} onChange={e => setForm({ ...form, note: e.target.value })} className="border px-3 py-2 rounded" />
+        <input type="text" placeholder="ETA (optional)" value={form.eta} onChange={e => setForm({ ...form, eta: e.target.value })} className="border px-3 py-2 rounded" />
+        <input type="text" placeholder="Secret Key" value={form.secret} onChange={e => setForm({ ...form, secret: e.target.value })} required className="border px-3 py-2 rounded" />
+      </div>
+      <button type="submit" className="mt-4 bg-blue-600 text-white px-6 py-2 rounded">Submit Update</button>
     </form>
   );
 }
