@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PackageDetail from './PackageDetail';
 import CourierForm from './CourierForm';
-const API_TOKEN = import.meta.env.VITE_API_TOKEN;
-
+const API_URL = import.meta.env.VITE_API_URL;
 function App() {
   const [packages, setPackages] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -20,7 +19,8 @@ function App() {
 
   const fetchPackages = async () => {
     try {
-      const res = await axios.get(`${API_TOKEN}/api/packages`);
+      const res = await axios.get(`${API_URL}/api/packages`);
+      //const res = await axios.get('http://localhost:5000/api/packages');
       setPackages(res.data);
     } catch (err) {
       console.error('Failed to fetch packages', err);

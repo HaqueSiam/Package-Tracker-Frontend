@@ -1,7 +1,7 @@
 // === File: COURIER-TRAKER/src/CourierForm.jsx ===
 import React, { useState } from 'react';
 import axios from 'axios';
-const API_TOKEN = import.meta.env.VITE_API_TOKEN;
+const API_URL = import.meta.env.VITE_API_URL;
 const statuses = [
   'CREATED', 'PICKED_UP', 'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'DELIVERED', 'EXCEPTION', 'CANCELLED'
 ];
@@ -14,7 +14,7 @@ function CourierForm({ setAlert, fetchPackages }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.get(`${API_TOKEN}/api/packages/update`, form);
+      await axios.post(`${API_URL}/api/packages/update`, form);
       setAlert('Package updated successfully.');
       setForm({ package_id: '', status: '', lat: '', lon: '', note: '', eta: '', secret: '' });
       fetchPackages();
