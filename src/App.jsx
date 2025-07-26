@@ -1,8 +1,9 @@
-// === File: client/src/App.jsx ===
+// === File: COURIER-TRAKER/src/App.jsx ===
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PackageDetail from './PackageDetail';
 import CourierForm from './CourierForm';
+const API_TOKEN = import.meta.env.VITE_API_TOKEN;
 
 function App() {
   const [packages, setPackages] = useState([]);
@@ -19,7 +20,7 @@ function App() {
 
   const fetchPackages = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/packages');
+      const res = await axios.get(`${API_TOKEN}/api/packages`);
       setPackages(res.data);
     } catch (err) {
       console.error('Failed to fetch packages', err);

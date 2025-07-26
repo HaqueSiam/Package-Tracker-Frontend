@@ -1,12 +1,12 @@
-// === File: client/src/PackageDetail.jsx ===
+// === File: COURIER-TRAKER/src/PackageDetail.jsx ===
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+const API_TOKEN = import.meta.env.VITE_API_TOKEN;
 function PackageDetail({ id, onClose }) {
   const [pkg, setPkg] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/packages/${id}`)
+    axios.get(`${API_TOKEN}/api/packages/${id}`)
       .then(res => setPkg(res.data))
       .catch(err => console.error('Failed to fetch package details', err));
   }, [id]);
